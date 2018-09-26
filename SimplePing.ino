@@ -1,4 +1,4 @@
-// MyPing - Simple program to interface and test HC-SR04 module
+// SimplePing - Simple program to interface and test HC-SR04 module
 // by G. C. Holden
 
 // Program to allow an Arduino to utilize an HC-SR04 
@@ -21,6 +21,10 @@
 #define ECHO_PIN          27    // Pin # connected to Ultrasonic Echo
 #define MAX_DISTANCE_CM   274   // Maximum distance sensor can read in CM
 
+#define MAX_WAIT_TIME     MAX_DISTANCE_CM*58
+
+unsigned long roundtripTime;    // Microseconds until ping returns
+int distance;                   // Distance calculation from microseconds
 
 void setup() {          // Initialization routine only runs once 
     // Start Serial communication
@@ -49,7 +53,8 @@ void loop() {          // Main loop runs for the rest of time
       distance = roundtripTime / 58;
       
       // Output distance in CM for testing purposes
-      Serial.println(roundtripTime/58);
+      Serial.print (distance);
+      Serial.println("cm");
 
       // PLACE CODE OR FUNCTION CALL HERE TO DO SOMETHING BASED ON PING VALUE
 
