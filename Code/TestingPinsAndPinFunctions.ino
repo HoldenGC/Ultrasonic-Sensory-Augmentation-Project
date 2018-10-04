@@ -7,18 +7,11 @@
 // Serial monitor (115200) where the list can be cut and pasted into
 // a .CSV text file. It can then be opened in Excel, and 
 // sorted and searched as needed.
-// Runs a loop that increments from 1 to 70. Numbers that 
-// return NOT_A_PIN are not output.
-
-
-// Arduino pins for trigger and echo can be changed by changing 
-// the value below in the #define statement. HC-SR04 is 5v - DO
-// NOT USE it with 3.3v Arduinos.
+// Runs a loop that increments from 1 to NUM_DIGITAL_PINS, which is
+// defined within the Arduino Library.
 
 // Must include the Arduino Library
 #include <Arduino.h>
-
-// Change pin values to appropriate pin you are using on Arduino
 
 void setup() {          // Initialization routine only runs once 
 
@@ -47,18 +40,16 @@ void setup() {          // Initialization routine only runs once
       Serial.print (index);
       Serial.print (", ");
 
+      // Store value of the current numbered pins assigned register in pinToPort
       pinToPort = digitalPinToPort(index);
+      // Store value of the current numbered pins register bitmask in pinToBitMask
       pinToBitMask = digitalPinToBitMask(index);
       
       // Test to see if pin number is an invalid pin
       if ((pinToPort > 0) & (pinToPort < (13))){
-        
-        // If it port does not come back 0, print register as binary
-
-        // First determine pin designation using register and bitmask
 
         // Check each bit place in bitmask to determine 
-        // what the register place number is
+        // what the placement in the bitmask is
         
         checkbit = pinToBitMask;
         for (place = 7; place >= 0; place--){
@@ -67,7 +58,7 @@ void setup() {          // Initialization routine only runs once
         }
         
         // Print port and port-pin combination
-        Serial.write (pinToPort + 64); // Shift into ASCII range to print
+        Serial.write (pinToPort + 64); // Shift into ASCII range to print registers as letters
         Serial.print (", ");
         Serial.write (pinToPort + 64);
         Serial.print (place);
@@ -79,17 +70,17 @@ void setup() {          // Initialization routine only runs once
         Serial.print (pinToBitMask,BIN);
         Serial.print (", ");
 
-        // For fun, print mode flags of register (status of each bit flag)
+        // Print mode flags of register (status of each bit flag)
         portContent = *portModeRegister(pinToPort);
         Serial.print  (portContent,BIN);
         Serial.print (", ");
 
-        // For fun, print output mode flags of register (status of each bit flag)
+        // Print output mode flags of register (status of each bit flag)
         portContent = *portOutputRegister(pinToPort);
         Serial.print  (portContent,BIN);
         Serial.print (", ");
 
-        // For fun, print high/low values of input pins in register (status of each bit flag)
+        // Print high/low values of input pins in register (status of each bit flag)
         portContent = *portInputRegister(pinToPort);
         Serial.println (portContent,BIN);
         
@@ -107,7 +98,7 @@ void setup() {          // Initialization routine only runs once
 } // END of initialization 
 
 
+
 void loop() {          // Main loop does nothing
   delay(3000);
-  
 }  // END of main loop
