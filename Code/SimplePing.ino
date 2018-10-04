@@ -15,6 +15,7 @@
 
 // Must include the Arduino Library
 #include <Arduino.h>
+#include <LiquidCrystal.h>
 
 // Change pin values to appropriate pin you are using on Arduino
 #define TRIG_PIN          26    // Pin # connected to Ultrasonic Trigger
@@ -26,14 +27,26 @@
 unsigned long roundtripTime;    // Microseconds until ping returns
 int distance;                   // Distance calculation from microseconds
 
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7); // Setup LCD object
+
 void setup() {          // Initialization routine only runs once 
-    // Start Serial communication
-    Serial.begin(115200);
+//    Start Serial communication
+//    Serial.begin(115200);
     // Define pin modes
     pinMode(TRIG_PIN, OUTPUT);
     pinMode(ECHO_PIN, INPUT);
     // Bring trigger low as part of initialization
     digitalWrite(TRIG_PIN, LOW);
+
+    // Initialize LCD display
+    lcd.begin(16, 2);              // Define 16 character x 2 line
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Booting up...."); // print a simple message
+    delay(1000);
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Dist: ");
 } // END of initialization 
 
 
@@ -52,12 +65,18 @@ void loop() {          // Main loop runs for the rest of time
       // Calculate one way distance in CM - Change 58 to 148 for inches
       distance = roundtripTime / 58;
       
-      // Output distance in CM for testing purposes
-      Serial.print (distance);
-      Serial.println("cm");
+      // CODE THAT DOES SOMETHING WITH THE RESULTS GOES HERE
 
-      // PLACE CODE OR FUNCTION CALL HERE TO DO SOMETHING BASED ON PING VALUE
+      // Output distance in CM to serial for testing purposes
+//      Serial.print (distance);
+//      Serial.println("cm");
 
+      // Output distance in CM to LCD for testing purposes
+      lcd.setCursor(6,0);  
+      lcd.print("   ");
+      lcd.setCursor(6,0);
+      lcd.print(distance);  
+        
       // Wait 1/10 of a second before beginning loop again
       delay(100);  
  
